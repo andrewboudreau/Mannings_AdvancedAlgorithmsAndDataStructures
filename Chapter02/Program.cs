@@ -14,9 +14,9 @@ var tasks = new Pair[8]
 
 var heap = new DHeap(tasks);
 
-
 heap.Print();
-heap.BubbleUp();
+heap.BubbleUp(tasks.Length - 1);
+heap.Print();
 
 public record Pair(int Priority, string Element);
 
@@ -24,7 +24,7 @@ public class DHeap
 {
     private const int BranchingFactor = 3;
     private readonly Pair[] pairs;
-    private Pair swapSpace;
+    private Pair? swapSpace;
 
     public DHeap(params Pair[] pairs)
     {
@@ -36,25 +36,27 @@ public class DHeap
         if (index < 0) throw new ArgumentOutOfRangeException(nameof(index), "cannot be less than 0");
         if (index > pairs.Length - 1) throw new ArgumentOutOfRangeException(nameof(index), "cannot be greater than array length - 1.");
 
-        int parentIndex = index;
-        int currentIndex;
+        static int getParentIndex(int x) => (x - 1) / BranchingFactor;
+        int parentIndex;
 
-        while (parentIndex > 0)
+        var current = pairs[index];
+        while (index > 0)
         {
-            currentIndex = parentIndex;
-            parentIndex = (parentIndex - 1) / BranchingFactor;
-
-            if (pairs[parentIndex].Priority < pairs[currentIndex].Priority)
-                Swap(currentIndex, parentIndex);
+            parentIndex = getParentIndex(index);
+            if (pairs[parentIndex].Priority < current.Priority)
+            {
+                pairs[index] = pairs[parentIndex];
+                index = parentIndex;
+                Print(parentIndex, index);
+            }
             else
+            {
                 break;
-
-            Print(currentIndex, parentIndex);
+            }   
         }
-    }
 
-    public void BubbleUp()
-        => BubbleUp(pairs.Length - 1);
+        pairs[index] = current;
+    }
 
     private void Swap(int left, int right)
     {

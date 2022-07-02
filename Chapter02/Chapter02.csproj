@@ -12,9 +12,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <None Update="day1.txt">
+		<None Include="..\.editorconfig" Link=".editorconfig" />
+		<None Update="day1.txt">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </None>
 	</ItemGroup>
-
+	
 </Project>
