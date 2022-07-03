@@ -21,6 +21,7 @@ heap.Print();
 heap.BubbleUp(tasks.Length - 1);
 heap.Print();
 
+//-------------------------------------------------------------------------
 // Figure 2.8
 Console.WriteLine();
 Console.WriteLine("PushDown");
@@ -41,6 +42,29 @@ heap.Print();
 heap.PushDown();
 heap.Print();
 
+
+//--------------------------------------------------------------
+// Figure 2.9
+Console.WriteLine();
+Console.WriteLine("Insert");
+tasks = new Pair[8]
+{
+    new Pair(100, "Unencrypted password on DB"),
+    new Pair(90, "UI breaks on browser X"),
+    new Pair(90, "Memory leak"),
+    new Pair(80, "CSS style causes misalignment"),
+    new Pair(70, "Page loads take 2+ seconds"),
+    new Pair(50, "CSS style causes 1px offset"),
+    new Pair(30, "Refactor CSS using SASS"),
+    new Pair(80, "Optional form field blocked"),
+};
+
+heap = new DHeap(tasks);
+heap.Print();
+heap.Insert(95, "Add exception for Super Bowl");
+heap.Print();
+
+
 public record Pair(int Priority, string Element);
 
 
@@ -49,15 +73,19 @@ public class DHeap
     public const int None = -1;
     private const int BranchingFactor = 3;
 
-    private readonly Pair[] pairs;
-    private readonly int firstLeafIndex;
-
+    private Pair[] pairs;
     private Pair? swapSpace;
 
     public DHeap(params Pair[] pairs)
     {
         this.pairs = pairs;
-        firstLeafIndex = (pairs.Length - 2) / (BranchingFactor + 1);
+    }
+
+    public void Insert(int priority, string element)
+    {
+        Array.Resize(ref pairs, pairs.Length + 1);
+        pairs[^1] = new Pair(priority, element);
+        BubbleUp(pairs.Length - 1);
     }
 
     /// <summary>
@@ -104,6 +132,8 @@ public class DHeap
         if (index > pairs.Length - 1) throw new ArgumentOutOfRangeException(nameof(index), "cannot be greater than array length - 1.");
 
         var current = pairs[index];
+        int firstLeafIndex = (pairs.Length - 2) / (BranchingFactor + 1);
+
         while (index < firstLeafIndex)
         {
             var childIndex = GetHighestPriorityChildIndex(index);
