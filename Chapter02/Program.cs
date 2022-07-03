@@ -16,7 +16,7 @@ var tasks = new Pair[8]
 
 var heap = new DHeap(tasks);
 
-Console.WriteLine("PushDown");
+Console.WriteLine("BubbleUp");
 heap.Print();
 heap.BubbleUp(tasks.Length - 1);
 heap.Print();
@@ -28,17 +28,17 @@ tasks = new Pair[8]
 {
     new Pair(9, "UI breaks on browser X"),
     new Pair(10, "Unencrypted password on DB"),
-    new Pair(8, "Optional form field blocked"),
+    new Pair(9, "Memory leak"),
     new Pair(8, "CSS style causes misalignment"),
     new Pair(7, "Page loads take 2+ seconds"),
     new Pair(5, "CSS style causes 1px offset"),
     new Pair(3, "Refactor CSS using SASS"),
-    new Pair(9, "Memory leak")
+    new Pair(8, "Optional form field blocked")
 };
 
 heap = new DHeap(tasks);
 heap.Print();
-heap.PushDown(0);
+heap.PushDown();
 heap.Print();
 
 public record Pair(int Priority, string Element);
@@ -81,7 +81,6 @@ public class DHeap
             {
                 pairs[index] = pairs[parentIndex];
                 index = parentIndex;
-                Print(parentIndex, index);
             }
             else
             {
@@ -99,32 +98,32 @@ public class DHeap
     /// </summary>
     /// <param name="index">The index of the element to begin with.</param>
     /// <exception cref="ArgumentOutOfRangeException"></exception>
-    public void PushDown(int index)
+    public void PushDown(int index = 0)
     {
         if (index < 0) throw new ArgumentOutOfRangeException(nameof(index), "cannot be less than 0");
         if (index > pairs.Length - 1) throw new ArgumentOutOfRangeException(nameof(index), "cannot be greater than array length - 1.");
 
-        var currentIndex = index;
-        while (currentIndex < firstLeafIndex)
+        var current = pairs[index];
+        while (index < firstLeafIndex)
         {
-            var childIndex = GetHighestPriorityChildIndex(currentIndex);
+            var childIndex = GetHighestPriorityChildIndex(index);
             if (childIndex == None)
             {
-                Console.WriteLine("Get None during pushdown.");
-                break;
+                throw new Exception("ChildIndex is None");
             }
 
-            if (pairs[childIndex].Priority > pairs[currentIndex].Priority)
+            if (pairs[childIndex].Priority > pairs[index].Priority)
             {
-                Swap(currentIndex, childIndex);
-                currentIndex = childIndex;
-                Print(currentIndex, childIndex);
+                pairs[index] = pairs[childIndex];
+                index = childIndex;
             }
             else
             {
                 break;
             }
         }
+
+        pairs[index] = current;
     }
 
     /// <summary>
@@ -136,10 +135,11 @@ public class DHeap
     /// <exception cref="InvalidOperationException"></exception>
     private int GetHighestPriorityChildIndex(int index)
     {
+        var start = index;
         if (index < 0) throw new ArgumentOutOfRangeException(nameof(index), "cannot be less than 0");
         if (index > pairs.Length - 1) throw new ArgumentOutOfRangeException(nameof(index), "cannot be greater than array length - 1.");
 
-        var first = GetFirstChildIndex(index);
+        var first = index * BranchingFactor + 1;
         var last = Math.Min(first + BranchingFactor, pairs.Length);
 
         if (first > pairs.Length)
@@ -155,21 +155,8 @@ public class DHeap
             }
         }
 
+        Console.WriteLine($"Highest Priority Child of index:{start} is {index}");
         return index;
-    }
-
-    /// <summary>
-    /// Gets the index of the first child node of a heap node by it's index.
-    /// </summary>
-    /// <param name="index">the index of the node for which to find the first child.</param>
-    /// <returns>The index of the left-most child index of the given index.</returns>
-    /// <exception cref="ArgumentOutOfRangeException"></exception>
-    private int GetFirstChildIndex(int index)
-    {
-        if (index < 0) throw new ArgumentOutOfRangeException(nameof(index), "cannot be less than 0");
-        if (index > pairs.Length - 1) throw new ArgumentOutOfRangeException(nameof(index), "cannot be greater than array length - 1.");
-
-        return index * BranchingFactor + 1;
     }
 
     private void Swap(int firstIndex, int secondIndex)

@@ -13,6 +13,7 @@
 
 	<ItemGroup>
 		<None Include="..\.editorconfig" Link=".editorconfig" />
+		<PackageReference Include="ClrHeapAllocationAnalyzer" Version="3.0.0" />
 		<None Update="day1.txt">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </None>
