@@ -69,8 +69,24 @@ var t = heap.Top();
 Console.WriteLine($"Top value is = {t}");
 heap.Print();
 
-public record Pair(int Priority, string Element);
+// Update Method No Figure in book.
+Console.WriteLine();
+Console.WriteLine($"Updating task to priority 97");
+heap.Update("CSS style causes 1px offset", 97);
+heap.Print();
 
+
+// Peek
+Console.WriteLine();
+Console.WriteLine("Peeking top");
+var peek = heap.Peek();
+heap.Print();
+Console.WriteLine();
+Console.WriteLine("TopK=6 are...");
+var topK= heap.TopK(6);
+topK.Print();
+
+public record Pair(int Priority, string Element);
 
 public class DHeap
 {
@@ -83,16 +99,42 @@ public class DHeap
     public DHeap(params Pair[] pairs)
     {
         this.pairs = pairs;
+        for (var index = (pairs.Length - 1) / BranchingFactor; index > 0; index--)
+        {
+            PushDown(index);
+        }
     }
 
-    public void Insert(int priority, string element)
+    public int Size => pairs.Length;
+
+    public DHeap TopK(int k)
     {
-        Array.Resize(ref pairs, pairs.Length + 1);
-        pairs[^1] = new Pair(priority, element);
-        BubbleUp(pairs.Length - 1);
+        var heap = new DHeap();
+        foreach (var el in pairs)
+        {
+            if (heap.Size == k && heap.Peek().Priority < el.Priority)
+            {
+                _ = heap.Top();
+            }
+            if (heap.Size < k)
+            {
+                heap.Insert(el.Priority, el.Element);
+            }
+        }
+        return heap;
     }
 
-    public string Top()
+    public Pair Peek()
+    {
+        if (pairs.Length == 0)
+        {
+            throw new InvalidOperationException($"{nameof(DHeap)} is empty");
+        }
+
+        return pairs[0];
+    }
+
+    public Pair Top()
     {
         if (pairs.Length == 0)
         {
@@ -103,14 +145,52 @@ public class DHeap
         Array.Resize(ref pairs, pairs.Length - 1);
         if (pairs.Length == 0)
         {
-            return p.Element;
+            return p;
         }
         else
         {
             var pair = pairs[0];
             pairs[0] = p;
             PushDown();
-            return pair.Element;
+            return pair;
+        }
+    }
+
+    public void Insert(int priority, string element)
+    {
+        Array.Resize(ref pairs, pairs.Length + 1);
+        pairs[^1] = new Pair(priority, element);
+        BubbleUp(pairs.Length - 1);
+    }
+
+    public void Update(string oldValue, int newPriority)
+    {
+        int index;
+        for (index = 0; index < pairs.Length; index++)
+        {
+            if (pairs[index].Element == oldValue)
+            {
+                break;
+            }
+        }
+
+        Console.WriteLine($"Found item at index {index}");
+
+        if (index >= 0)
+        {
+            var oldPriority = pairs[index].Priority;
+            pairs[index] = pairs[index] with { Priority = newPriority };
+
+            if (newPriority > oldPriority)
+            {
+                Console.WriteLine("BubblingUp Priority");
+                BubbleUp(index);
+            }
+            else if (newPriority < oldPriority)
+            {
+                Console.WriteLine("PushingDown Priority");
+                PushDown(index);
+            }
         }
     }
 
