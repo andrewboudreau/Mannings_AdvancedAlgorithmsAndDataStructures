@@ -64,6 +64,10 @@ heap.Print();
 heap.Insert(95, "Add exception for Super Bowl");
 heap.Print();
 
+// Fig 2.10
+var t = heap.Top();
+Console.WriteLine($"Top value is = {t}");
+heap.Print();
 
 public record Pair(int Priority, string Element);
 
@@ -86,6 +90,28 @@ public class DHeap
         Array.Resize(ref pairs, pairs.Length + 1);
         pairs[^1] = new Pair(priority, element);
         BubbleUp(pairs.Length - 1);
+    }
+
+    public string Top()
+    {
+        if (pairs.Length == 0)
+        {
+            throw new InvalidOperationException($"{nameof(DHeap)} is empty");
+        }
+
+        var p = pairs[^1];
+        Array.Resize(ref pairs, pairs.Length - 1);
+        if (pairs.Length == 0)
+        {
+            return p.Element;
+        }
+        else
+        {
+            var pair = pairs[0];
+            pairs[0] = p;
+            PushDown();
+            return pair.Element;
+        }
     }
 
     /// <summary>
