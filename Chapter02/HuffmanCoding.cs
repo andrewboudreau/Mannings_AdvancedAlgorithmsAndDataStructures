@@ -52,6 +52,24 @@ namespace Chapter02
             return BuildTable(priorityQueue.Top());
         }
 
+        /// <summary>
+        /// The Huffman coding algorithm (building a table from the tree)
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        /// <remarks>
+        /// <code>
+        /// function buildTable(node, sequence, charactersToSequenceMap)
+        ///   if node.characters.size == 1 then
+        ///     charactersToSequenceMap[node.characters[0]] ← sequence 
+        ///   else
+        ///     if node.left <> null then
+        ///       buildTable(node.left, 0 + sequence, charactersToSequenceMap) 
+        ///     if node.right <> null then
+        ///       buildTable(node.right, 1 + sequence, charactersToSequenceMap) 
+        ///   return charactersToSequenceMap
+        /// </code>
+        /// </remarks>
         private static object BuildTable((TreeNode Element, int Priority) value)
         {
             return "blah";

@@ -1,5 +1,22 @@
 ﻿namespace Chapter00.Heap
 {
+    /// <summary>
+    /// https://github.com/mlarocca/AlgorithmsAndDataStructuresInAction/blob/7a5b7a7a2b84257c99c28f6b92e47141f844afc9/Python/mlarocca/datastructures/heap/dway_heap.py#L51
+    /// https://livebook.manning.com/book/algorithms-and-data-structures-in-action/chapter-2/374
+    /// **Implementation of a d-ary heap.**
+    /// The branching factor for the heap can be passed as an argument.
+    /// It's 2 by default, which is also the minimum possible value.
+    /// The branching factor is the maximum number of children that each internal node can have.
+    /// For regular heaps, a node an have at most 2 children, so the branching factor is 2.
+    /// The higher the branching factor, the shortest the height of the heap. However, when an element is
+    /// pushed towards the leaves of the heap, at each step all children of current node must be examined,
+    /// so a larger branching factor implies a higher number of nodes to be checked for each step of this
+    /// operation.
+    /// On the other hand, inserting elements only examines at most h element, where h is the height of the heap,
+    /// so this operation is only made faster with larger branching factors.
+    /// In general values between 3 and 5 are a good compromise and produce good performance."""
+    /// </summary>
+    /// <typeparam name="T">The type of heap element. These items get priority.</typeparam>
     public class DHeap<T>
     {
         public const int None = -1;
@@ -27,6 +44,12 @@
 
         protected DHeap(IEnumerable<(T Element, int Priority)> array, int branchingFactor)
         {
+            if (branchingFactor < 2)
+            {
+                throw new ArgumentOutOfRangeException(nameof(branchingFactor), $"Branching factor ({branchingFactor}) must be greater than 1.");
+            }
+
+
             this.branchingFactor = branchingFactor;
 
             nodes = array
@@ -143,6 +166,20 @@
                     PushDown(index);
                 }
             }
+        }
+
+
+        /// <summary>
+        /// TODO: https://github.com/mlarocca/AlgorithmsAndDataStructuresInAction/blob/7a5b7a7a2b84257c99c28f6b92e47141f844afc9/Python/mlarocca/datastructures/heap/dway_heap.py#L51
+        /// Checks that the three invariants for heaps are abided by.
+        /// 1.	Every node has at most `branchingFactor` children. (Guaranteed by construction)
+        /// 2.	The heap tree is complete and left-adjusted.(Also guaranteed by construction)
+        /// 3.	Every node holds the highest priority in the subtree rooted at that node.
+        /// </summary>
+        /// <returns>True if all the heap invariants are met, false otherwise.</returns>
+        public bool Validate()
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>
