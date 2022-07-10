@@ -1,4 +1,4 @@
-﻿namespace Day00
+﻿namespace Chapter00.NonBookDataStructures
 {
     public static class RenderExtensions
     {
