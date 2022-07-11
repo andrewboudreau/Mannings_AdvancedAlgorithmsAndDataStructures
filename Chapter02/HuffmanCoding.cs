@@ -4,16 +4,21 @@ namespace Chapter02
 {
     public class TreeNode
     {
-        public TreeNode(string value, int frequency)
+        public TreeNode(string characters, int frequency)
         {
-            Value = value;
+            Characters = characters;
             Frequency = frequency;
         }
 
         public TreeNode? Left;
         public TreeNode? Right;
-        public string Value;
+        public string Characters;
         public int Frequency;
+
+        public override string ToString()
+        {
+            return $"freq:{Frequency}, {Characters} - Left: {Left}, Right: {Right}";
+        }
     }
 
     /// <summary>
@@ -39,7 +44,9 @@ namespace Chapter02
                 var left = priorityQueue.Top();
                 var right = priorityQueue.Top();
 
-                var parent = new TreeNode(left.Element.Value + right.Element.Value, left.Priority + right.Priority)
+                var parent = new TreeNode(
+                    left.Element.Characters + right.Element.Characters,
+                    left.Priority + right.Priority)
                 {
                     Left = left.Element,
                     Right = right.Element
@@ -49,7 +56,8 @@ namespace Chapter02
             }
 
             priorityQueue.Print();
-            return BuildTable(priorityQueue.Top());
+            return 1;
+            //return BuildTable(priorityQueue.Top());
         }
 
         /// <summary>
@@ -70,9 +78,13 @@ namespace Chapter02
         ///   return charactersToSequenceMap
         /// </code>
         /// </remarks>
-        private static object BuildTable((TreeNode Element, int Priority) value)
+        private static object BuildTable(TreeNode node, List<char> sequence, Dictionary<string, string> charactersToSequenceMap)
         {
-            return "blah";
+            if (node.Characters.Length == 1)
+            {
+                //charactersToSequenceMap[node.Characters[0]] = sequence;
+            }
+            return true;
         }
 
         public static Dictionary<char, int> ComputeFrequencies(string text)

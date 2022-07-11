@@ -3,7 +3,6 @@
 using Chapter02;
 
 // Resources
-// https://github.com/mlarocca/AlgorithmsAndDataStructuresInAction/blob/7a5b7a7a2b84257c99c28f6b92e47141f844afc9/Python/mlarocca/datastructures/heap/dway_heap.py#L169
 // https://livebook.manning.com/book/algorithms-and-data-structures-in-action/chapter-2/184
 
 // Figure 2.6
@@ -39,6 +38,14 @@ heap = new DHeap<string>(
 heap.Print();
 heap.PushDown();
 heap.Print();
+Console.WriteLine("Print Heap");
+var item = heap.Top();
+while (item != default)
+{
+    Console.WriteLine($"{item.Priority}: {item.Element}");
+    item = heap.Top();
+}
+
 
 
 //--------------------------------------------------------------
@@ -58,6 +65,7 @@ heap = new DHeap<string>(
 heap.Print();
 heap.Insert("Add exception for Super Bowl", 95);
 heap.Print();
+
 
 //--------------------------------------------------------------
 // Fig 2.10

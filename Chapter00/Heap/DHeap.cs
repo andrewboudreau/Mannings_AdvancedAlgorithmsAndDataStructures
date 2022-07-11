@@ -40,6 +40,11 @@
                 element = Element;
                 priority = Priority;
             }
+
+            public override string ToString()
+            {
+                return Element.ToString();
+            }
         }
 
         protected DHeap(IEnumerable<(T Element, int Priority)> array, int branchingFactor)
@@ -82,10 +87,11 @@
             var heap = new DHeap<T>();
             foreach (var el in nodes)
             {
-                if (heap.Size == k && heap.Peek().Priority < el.Priority)
+                if (heap.Size == k && heap.Peek().Priority > el.Priority)
                 {
                     _ = heap.Top();
                 }
+
                 if (heap.Size < k)
                 {
                     heap.Insert(el.Element, el.Priority);
@@ -99,7 +105,7 @@
         {
             if (nodes.Length == 0)
             {
-                throw new InvalidOperationException($"{nameof(DHeap<T>)} is empty");
+                return default;
             }
 
             return (nodes[0].Element, nodes[0].Priority);
@@ -110,7 +116,7 @@
             PriorityNode temp;
             if (nodes.Length == 0)
             {
-                throw new InvalidOperationException($"{nameof(DHeap<T>)} is empty");
+                return default;
             }
 
             temp = nodes[^1];
@@ -155,12 +161,12 @@
                 var oldPriority = nodes[index].Priority;
                 nodes[index] = nodes[index] with { Priority = newPriority };
 
-                if (newPriority > oldPriority)
+                if (newPriority < oldPriority)
                 {
                     Console.WriteLine("BubblingUp Priority");
                     BubbleUp(index);
                 }
-                else if (newPriority < oldPriority)
+                else if (newPriority > oldPriority)
                 {
                     Console.WriteLine("PushingDown Priority");
                     PushDown(index);
@@ -197,7 +203,7 @@
             while (index > 0)
             {
                 parentIndex = (index - 1) / branchingFactor;
-                if (nodes[parentIndex].Priority < current.Priority)
+                if (nodes[parentIndex].Priority > current.Priority)
                 {
                     nodes[index] = nodes[parentIndex];
                     index = parentIndex;
@@ -212,9 +218,9 @@
         }
 
         /// <summary>
+        /// https://livebook.manning.com/book/algorithms-and-data-structures-in-action/chapter-2/170
         /// The PushDown method handles the symmetric case where we need to move an element down toward the 
         /// leaves of the heap, because it might be larger than (at least) one of its children. 
-        /// https://livebook.manning.com/book/algorithms-and-data-structures-in-action/chapter-2/170
         /// </summary>
         /// <param name="index">The index of the element to begin with.</param>
         /// <exception cref="ArgumentOutOfRangeException"></exception>
@@ -234,7 +240,7 @@
                     throw new Exception("ChildIndex is None");
                 }
 
-                if (nodes[childIndex].Priority > nodes[index].Priority)
+                if (nodes[childIndex].Priority < nodes[index].Priority)
                 {
                     nodes[index] = nodes[childIndex];
                     index = childIndex;
@@ -267,10 +273,10 @@
             if (firstChildIndex > nodes.Length)
                 return None;
 
-            var highest = int.MinValue;
+            var highest = int.MaxValue;
             for (int i = firstChildIndex; i < lastChildIndex; i++)
             {
-                if (nodes[i].Priority > highest)
+                if (nodes[i].Priority < highest)
                 {
                     highest = nodes[i].Priority;
                     index = i;
