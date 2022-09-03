@@ -1,4 +1,6 @@
-﻿namespace Chapter00.Heap
+﻿using System.Xml.Linq;
+
+namespace Chapter00.Heap
 {
     /// <summary>
     /// https://github.com/mlarocca/AlgorithmsAndDataStructuresInAction/blob/7a5b7a7a2b84257c99c28f6b92e47141f844afc9/Python/mlarocca/datastructures/heap/dway_heap.py#L51
@@ -28,8 +30,8 @@
         {
             internal PriorityNode(T element, int priority)
             {
-                Priority = priority;
                 Element = element;
+                Priority = priority;
             }
 
             internal readonly T Element;
@@ -39,6 +41,11 @@
             {
                 element = Element;
                 priority = Priority;
+            }
+
+            public override string ToString()
+            {
+                return $"Priority:{Priority} Value:{Element}";
             }
         }
 
@@ -155,12 +162,12 @@
                 var oldPriority = nodes[index].Priority;
                 nodes[index] = nodes[index] with { Priority = newPriority };
 
-                if (newPriority > oldPriority)
+                if (newPriority < oldPriority)
                 {
                     Console.WriteLine("BubblingUp Priority");
                     BubbleUp(index);
                 }
-                else if (newPriority < oldPriority)
+                else if (newPriority > oldPriority)
                 {
                     Console.WriteLine("PushingDown Priority");
                     PushDown(index);
@@ -183,10 +190,13 @@
         }
 
         /// <summary>
-        /// https://livebook.manning.com/book/algorithms-and-data-structures-in-action/chapter-2/150
+        /// Bubbles up towards the root an element, to reinstate heap's invariants.
+        /// If the parent P of an element has lower priority, then swaps current element and its parent,
+        /// and then recursively check the position previously held by the P.
         /// </summary>
-        /// <param name="index">The index of the element to begin with.</param>
+        /// <param name="index">The index of the element to bubble up.</param>
         /// <exception cref="ArgumentOutOfRangeException"></exception>
+        /// <remarks>reference https://livebook.manning.com/book/algorithms-and-data-structures-in-action/chapter-2/150
         public void BubbleUp(int index)
         {
             if (index < 0) throw new ArgumentOutOfRangeException(nameof(index), "cannot be less than 0");
@@ -224,7 +234,7 @@
             if (index > nodes.Length - 1) throw new ArgumentOutOfRangeException(nameof(index), "cannot be greater than array length - 1.");
 
             var current = nodes[index];
-            int firstLeafIndex = (nodes.Length - 2) / (branchingFactor + 1);
+            int firstLeafIndex = ((nodes.Length - 2) / branchingFactor) + 1;
 
             while (index < firstLeafIndex)
             {
@@ -255,6 +265,7 @@
         /// <returns>Returns -1 if the current node has no chilren</returns>
         /// <exception cref="ArgumentOutOfRangeException"></exception>
         /// <exception cref="InvalidOperationException"></exception>
+        /// <remarks>reference code https://github.com/mlarocca/AlgorithmsAndDataStructuresInAction/blob/7a5b7a7a2b84257c99c28f6b92e47141f844afc9/Python/mlarocca/datastructures/heap/dway_heap.py#L143</remarks>
         private int GetHighestPriorityChildIndex(int index)
         {
             var start = index;
