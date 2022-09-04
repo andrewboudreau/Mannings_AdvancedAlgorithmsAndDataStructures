@@ -5,3 +5,6 @@ dotnet_diagnostic.IDE0051.severity = none
 
 # HAA0502: Explicit new reference type allocation
 dotnet_diagnostic.HAA0502.severity = none
+
+# HAA0101: Array allocation for params parameter
+dotnet_diagnostic.HAA0101.severity = none

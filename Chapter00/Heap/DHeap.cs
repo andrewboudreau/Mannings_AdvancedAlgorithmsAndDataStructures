@@ -1,5 +1,4 @@
-﻿using System.Xml.Linq;
-
+﻿
 namespace Chapter00.Heap
 {
     /// <summary>
@@ -177,7 +176,7 @@ namespace Chapter00.Heap
 
 
         /// <summary>
-        /// TODO: https://github.com/mlarocca/AlgorithmsAndDataStructuresInAction/blob/7a5b7a7a2b84257c99c28f6b92e47141f844afc9/Python/mlarocca/datastructures/heap/dway_heap.py#L51
+        /// https://github.com/mlarocca/AlgorithmsAndDataStructuresInAction/blob/7a5b7a7a2b84257c99c28f6b92e47141f844afc9/Python/mlarocca/datastructures/heap/dway_heap.py#L51
         /// Checks that the three invariants for heaps are abided by.
         /// 1.	Every node has at most `branchingFactor` children. (Guaranteed by construction)
         /// 2.	The heap tree is complete and left-adjusted.(Also guaranteed by construction)
@@ -186,7 +185,22 @@ namespace Chapter00.Heap
         /// <returns>True if all the heap invariants are met, false otherwise.</returns>
         public bool Validate()
         {
-            throw new NotImplementedException();
+            var currentIndex = 0;
+            var firstLeaf = ((nodes.Length - 2) / branchingFactor) + 1;
+            while (currentIndex < firstLeaf)
+            {
+                var firstChild = currentIndex * branchingFactor + 1;
+                var lastChild = Math.Min(firstChild + branchingFactor, nodes.Length);
+                for (var childIndex = firstChild; childIndex < lastChild; childIndex++)
+                {
+                    if (nodes[currentIndex].Priority < nodes[childIndex].Priority)
+                    {
+                        return false;
+                    }
+                }
+                currentIndex++;
+            }
+            return true;
         }
 
         /// <summary>
@@ -233,7 +247,7 @@ namespace Chapter00.Heap
             if (index < 0) throw new ArgumentOutOfRangeException(nameof(index), "cannot be less than 0");
             if (index > nodes.Length - 1) throw new ArgumentOutOfRangeException(nameof(index), "cannot be greater than array length - 1.");
 
-            var current = nodes[index];
+            var input = nodes[index];
             int firstLeafIndex = ((nodes.Length - 2) / branchingFactor) + 1;
 
             while (index < firstLeafIndex)
@@ -244,7 +258,7 @@ namespace Chapter00.Heap
                     throw new Exception("ChildIndex is None");
                 }
 
-                if (nodes[childIndex].Priority > nodes[index].Priority)
+                if (nodes[childIndex].Priority > input.Priority)
                 {
                     nodes[index] = nodes[childIndex];
                     index = childIndex;
@@ -255,7 +269,7 @@ namespace Chapter00.Heap
                 }
             }
 
-            nodes[index] = current;
+            nodes[index] = input;
         }
 
         /// <summary>
@@ -288,7 +302,6 @@ namespace Chapter00.Heap
                 }
             }
 
-            Console.WriteLine($"Highest Priority Child of index:{start} is {index}");
             return index;
         }
 
