@@ -12,7 +12,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{49B71414-C27E-4465-A004-4CD582BF347A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests", "Tests\Tests.csproj", "{49B71414-C27E-4465-A004-4CD582BF347A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chapter03", "Chapter03\Chapter03.csproj", "{127C14E2-E422-4789-818A-3D99BE2049D0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -32,6 +34,10 @@ Global
 		{49B71414-C27E-4465-A004-4CD582BF347A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{49B71414-C27E-4465-A004-4CD582BF347A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{49B71414-C27E-4465-A004-4CD582BF347A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{127C14E2-E422-4789-818A-3D99BE2049D0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{127C14E2-E422-4789-818A-3D99BE2049D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{127C14E2-E422-4789-818A-3D99BE2049D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{127C14E2-E422-4789-818A-3D99BE2049D0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
