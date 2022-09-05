@@ -2,6 +2,8 @@
 
 using Chapter02;
 
+using System.Numerics;
+
 // Resources
 // https://github.com/mlarocca/AlgorithmsAndDataStructuresInAction/blob/7a5b7a7a2b84257c99c28f6b92e47141f844afc9/Python/mlarocca/datastructures/heap/dway_heap.py#L169
 // https://livebook.manning.com/book/algorithms-and-data-structures-in-action/chapter-2/184
@@ -85,6 +87,19 @@ topK.Print();
 
 //--------------------------------------------------------------
 // Fig 2.12
-Console.WriteLine("Starting Huffman coding algorithm.");
 Console.WriteLine();
-var result = HuffmanCoding.Huffman(HuffmanCoding.HuffmanTestString);
+Console.WriteLine();
+var huffmanString = "fffeeeeeddddddcccccccbbbbbbbbbbbbbbbbbbbbbbaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+Console.WriteLine($"Starting Huffman coding algorithm for '{huffmanString}'");
+Console.WriteLine("Huffman Encoding Table:");
+var encoding = HuffmanCoding.Huffman(huffmanString);
+foreach (var (key, value) in encoding)
+{
+    Console.WriteLine($"  {key}: {value}");
+}
+
+Console.WriteLine();
+foreach (var character in huffmanString)
+{
+    Console.Write(encoding[character]);
+}

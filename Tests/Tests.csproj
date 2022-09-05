@@ -18,6 +18,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Chapter00\Chapter00.csproj" />
+    <ProjectReference Include="..\Chapter02\Chapter02.csproj" />
   </ItemGroup>
 
 </Project>
